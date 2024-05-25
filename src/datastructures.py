@@ -43,21 +43,21 @@ class FamilyStructure:
 
     def add_member(self, member):
         self._members.append(member)
-        return True
+        return member
 
 
     def delete_member(self, id):
         for member in self._members:
-            if member[id]==id:
+            if member["id"]==id:
                 self._members.remove(member)
                 return True
-        return False
+        return None
 
     def get_member(self, id):
         for member in self._members:
-            if member[id]==id:
+            if member["id"]==id:
                 return member
-        return False
+        return None
 
     # this method is done, it returns a list with all the family members
     def get_all_members(self):

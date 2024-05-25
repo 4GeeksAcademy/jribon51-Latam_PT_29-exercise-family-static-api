@@ -31,6 +31,27 @@ def handle_hello():
     response_body =members
     return jsonify(response_body), 200
 
+
+
+@app.route('/member/<int:id>', methods=['GET'])
+def get_member_for_id(id):
+    members = jackson_family.get_member(id)
+    print("el integrante de la familia wes ",members)
+    if members is None:
+         return jsonify({"msg":"no se encuentra informaccion"}),404
+    return jsonify(members), 200
+
+
+@app.route('/member/<int:id>', methods=['DELETE'])
+def delete_member_for_id(id):
+    members = jackson_family.delete_member(id)
+    print("el integrante de la familia wes ",members)
+    if members is None:  
+        return jsonify({"msg":"no se encuentra informaccion"}),404
+    return jsonify({"done":members}), 200
+
+
+
 @app.route("/member",methods=['POST'])
 def new_member():
     body=request.get_json(silent=True)
@@ -40,14 +61,13 @@ def new_member():
         return jsonify({"message":"el campo first_name es obligatorio"})
     print(body)
     new_member_data = {
-            "id": jackson_family._generateId(),
+            "id": body.get("id",jackson_family._generateId()),
             "first_name": body["first_name"],
             "last_name": jackson_family.last_name,
             "age": body["age"],
             "lucky_numbers": body["lucky_numbers"]
         }
-    jackson_family.add_member(new_member_data)
-    return jsonify({"message":"nuevo miembro agregado"}),200
+    return jsonify(jackson_family.add_member(new_member_data)),200
 
 
 
